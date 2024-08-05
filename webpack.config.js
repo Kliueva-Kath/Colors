@@ -9,6 +9,7 @@ const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    assetModuleFilename: 'assets/[name][ext]',
   },
   devServer: {
     open: true,
@@ -30,8 +31,8 @@ const config = {
         loader: 'babel-loader',
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: 'asset',
+        test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/i,
+        type: 'asset/resource',
       },
       {
         test: /\.(scss|css)$/,
