@@ -124,10 +124,16 @@ document.addEventListener('DOMContentLoaded', () => {
           const productElement = document.createElement('div');
           productElement.className = 'product';
 
+          const productImageWrapper = document.createElement('div');
+          productImageWrapper.classList.add('product__image-wrapper');
+
           const productImage = document.createElement('img');
           productImage.classList.add('product__image');
           productImage.src = product.imageUrl;
           productImage.alt = product.name;
+
+          const productHoverPic = document.createElement('div');
+          productHoverPic.classList.add('product__hover-pic');
 
           const productName = document.createElement('h2');
           productName.classList.add('product__name');
@@ -166,7 +172,9 @@ document.addEventListener('DOMContentLoaded', () => {
           quantityControl.appendChild(quantitySpan);
           quantityControl.appendChild(plusButton);
 
-          productElement.appendChild(productImage);
+          productElement.appendChild(productHoverPic);
+          productImageWrapper.appendChild(productImage);
+          productElement.appendChild(productImageWrapper);
           productElement.appendChild(productName);
           productBottomPanel.appendChild(productPrice);
           productBottomPanel.appendChild(addProductBtn);
@@ -257,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const cartItemElement = document.createElement('div');
       cartItemElement.className = 'cart-item';
       cartItemElement.setAttribute('data-id', item.id);
-      console.log(item, 'item');
 
       const cartItemImage = document.createElement('img');
       cartItemImage.className = 'cart-item__image';
