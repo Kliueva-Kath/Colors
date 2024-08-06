@@ -30,12 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const productsAmountSpan = document.getElementById('products-amount');
   const cartContainer = document.querySelector('.cart-popup__items');
   const cartPopup = document.getElementById('cart-popup');
+  const filtersPopup = document.getElementById('filters-popup');
+  const openFiltersBtn = document.getElementById('open-filters-btn');
   const cartButton = document.querySelector('.header__cart-btn');
   const cartCloseButton = document.querySelector('.cart-popup__close');
   const cartCountElement = document.getElementById('open-cart-count');
   const clearCartButton = document.getElementById('clear-cart');
   const itemsAmountSpan = document.getElementById('cart-amount');
   const cartSumSpan = document.getElementById('cart-sum');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenuCloseBtn = document.querySelector('.mobile-menu__close');
+  const mobileMenuPopup = document.getElementById('mobile-menu-popup');
+
+  let startY = 0;
+  let endY = 0;
 
   let products = [];
   let cart = [];
@@ -69,11 +77,21 @@ document.addEventListener('DOMContentLoaded', () => {
         products = response.data;
         // Фильтрация продуктов
         const filters = {
-          new: document.getElementById('new').checked,
-          inStock: document.getElementById('in-stock').checked,
-          contract: document.getElementById('contract').checked,
-          exclusive: document.getElementById('exclusive').checked,
-          sale: document.getElementById('sale').checked,
+          new:
+            document.getElementById('new').checked ||
+            document.getElementById('new-mobile').checked,
+          inStock:
+            document.getElementById('in-stock').checked ||
+            document.getElementById('in-stock-mobile').checked,
+          contract:
+            document.getElementById('contract').checked ||
+            document.getElementById('contract-mobile').checked,
+          exclusive:
+            document.getElementById('exclusive').checked ||
+            document.getElementById('exclusive-mobile').checked,
+          sale:
+            document.getElementById('sale').checked ||
+            document.getElementById('sale-mobile').checked,
         };
 
         products = products.filter((product) => {
@@ -378,10 +396,49 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.classList.remove('show');
   });
 
-  // Закрытие корзины при клике на затемнение
+  // Обработка открытия мобильных фильтров
+  openFiltersBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    filtersPopup.classList.add('show');
+    overlay.classList.add('show');
+  });
+
+  // закрытие мобильных фильтров свайпом вниз
+  filtersPopup.addEventListener('touchstart', (event) => {
+    startY = event.touches[0].clientY;
+  });
+  filtersPopup.addEventListener('touchmove', (event) => {
+    endY = event.touches[0].clientY;
+  });
+  filtersPopup.addEventListener('touchend', () => {
+    if (endY > startY + 100) {
+      filtersPopup.classList.remove('show');
+      overlay.style.display = 'none';
+    }
+    startY = 0;
+    endY = 0;
+  });
+
+  // Обработка открытия попапа мобильного меню
+  mobileMenuBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    mobileMenuPopup.classList.add('show');
+    overlay.classList.add('show');
+  });
+
+  // Обработка закрытия попапа мобильного меню
+  mobileMenuCloseBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    mobileMenuPopup.classList.remove('show');
+    overlay.classList.remove('show');
+  });
+
+  // Закрытие попапов при клике на затемнение
   overlay.addEventListener('click', () => {
     finalizeRemovals();
     cartPopup.classList.remove('show');
+    filtersPopup.classList.remove('show');
+    mobileMenuPopup.classList.remove('show');
     overlay.classList.remove('show');
   });
   // окончательное удаление товара из корзины
